@@ -1,92 +1,95 @@
 import java.util.Scanner;
+import java.util.*; 
+import java.io.*;
 
 public class PolicyDemo {
-    public static void main(String[] args){
-        //create a Policy object
-        Policy polObj = new Policy();
+    public static void main(String[] args) {
+        try 
+        {
+            File file = new File("PolicyInformation.txt");
 
-        //asks for the policy number
-        Scanner polInput = new Scanner(System.in);
-        System.out.print("Please enter the Policy Number: ");
+            Scanner inputFile = new Scanner(file);
 
-        //converts string response to int and stores the users response in the policyNum field
-        polObj.policyNum = Integer.parseInt(polInput.nextLine());
+            int policyNum = 0, holderHeight = 0, holderWeight = 0, holderAge = 0, smokers = 0, nonsmokers = 0;
+            String providerName = "", holderFirst = "", holderLast = "", tempSmoker = "", fileInput = "";
+            boolean isSmoker = false;
 
-        //asks for the providers name
-        Scanner provInput = new Scanner(System.in);
-        System.out.print("Please enter the Provider Name: ");
+            ArrayList<Policy> policies = new ArrayList<Policy>();
 
-        //stores the users response in the providerName field
-        polObj.providerName = provInput.nextLine();
+            while(inputFile.hasNext()) 
+            {
+                fileInput = inputFile.nextLine();
+                System.out.println(fileInput);
 
-        //asks for the holders first name
-        Scanner firstInput = new Scanner(System.in);
-        System.out.print("Please enter the Policyholder's First Name: ");
+                policyNum = Integer.parseInt(fileInput);
+                System.out.println(policyNum);
 
-        //stores the users response in the holderFirst field
-        polObj.holderFirst = firstInput.nextLine();
+                providerName = inputFile.nextLine();
+                System.out.println(providerName);
 
-        //asks for the holders last name
-        Scanner lastInput = new Scanner(System.in);
-        System.out.print("Please enter the Policyholder's Last Name: ");
+                holderFirst = inputFile.nextLine();
+                System.out.println(holderFirst);
 
-        //stores the users response in the holderLast field
-        polObj.holderLast = lastInput.nextLine();
+                holderLast = inputFile.nextLine();
+                System.out.println(holderLast);
 
-        //asks for the holders age
-        Scanner ageInput = new Scanner(System.in);
-        System.out.print("Please enter the Policyholder's Age: ");
+                fileInput = inputFile.nextLine();
+                holderAge = Integer.parseInt(fileInput);
+                System.out.println(holderAge);
 
-        //converts string response to int and stores the users response in the holderAge field
-        polObj.holderAge = Integer.parseInt(ageInput.nextLine());
+                tempSmoker = inputFile.nextLine();
 
-        //asks is the holder is a smoker or not 
-        Scanner smokerInput = new Scanner(System.in);
-        System.out.print("Please enter the Policyholder's Smoking Status (smoker/non-smoker): ");
+                fileInput = inputFile.nextLine();
+                holderHeight = Integer.parseInt(fileInput);
+                System.out.println(holderHeight);
 
-        //stores the users response in a temporary variable
-        String tempSmoker = smokerInput.nextLine();
+                fileInput = inputFile.nextLine();
+                holderWeight = Integer.parseInt(fileInput);
+                System.out.println(holderWeight);
 
-        //sets the isSmoker field value to true or false depending on the response
-        if(tempSmoker.equals("non-smoker")){
-            polObj.isSmoker = false;
-        }else{
-            polObj.isSmoker = true;
+                if(inputFile.hasNext())
+                { 
+                    inputFile.nextLine();//skip the blank line if we have not reached the end of the file
+                }
+
+                if(tempSmoker.equals("non-smoker")){
+                    isSmoker = false;
+                    nonsmokers++;
+                }else{
+                    isSmoker = true;
+                    smokers++;
+                };
+            
+                Policy c = new Policy(policyNum, providerName, holderFirst, holderLast, holderAge, isSmoker, holderHeight, holderWeight);
+
+                policies.add(c);
+                
+            }
+
+            inputFile.close();//close the file
+      
+            //use a for loop to display the output
+            for(int i =0; i < policies.size(); i++) { 
+                System.out.println("Policy Number: " + policies.get(i).getPolicy());
+                System.out.println("Provider Name: " + policies.get(i).getProvider());
+                System.out.println("Policyholder's First Name: " + policies.get(i).getFirst());
+                System.out.println("Policyholder's Last Name: " + policies.get(i).getLast());
+                System.out.println("Policyholder's Age: " + policies.get(i).getAge()); 
+                System.out.println("Policyholder's Smoking Status (smoker/non-smoker): " + policies.get(i).getSmoker());
+                System.out.println("Policyholder's Height: " + policies.get(i).getHeight());  
+                System.out.println("Policyholder's Weight: " + policies.get(i).getWeight());  
+                System.out.printf("Policyholder's BMI: %.2f \n", + policies.get(i).getBMI());  
+                System.out.printf("Policy Price: $%.2f \n", policies.get(i).getPrice());
+                System.out.println();
+            }
+
+            System.out.println("The number of policies with a smoker is: " + smokers);
+            System.out.println("The number of policies with a non-smoker is: " + nonsmokers);
         }
-
-        //asks for the holders height in inches
-        Scanner heightInput = new Scanner(System.in);
-        System.out.print("Please enter the Policyholder's Height (in inches): ");
-
-        //converts string response to int and stores the users response in the holderHeight field
-        polObj.holderHeight = Double.parseDouble(heightInput.nextLine());
-
-        //asks for the holders weight in pounds
-        Scanner weightInput = new Scanner(System.in);
-        System.out.print("Please enter the Policyholder's Weight (in pounds): ");
-
-        //converts string response to int and stores the users response in the holderWeight field
-        polObj.holderWeight = Double.parseDouble(weightInput.nextLine());
-
-        //display the policy number
-        System.out.println("Policy Number: " + polObj.getPolicy());
-        //display the provider name
-        System.out.println("Provider Name: " + polObj.getProvider());
-        //display the policyholders first name
-        System.out.println("Policyholder's First Name: " + polObj.getFirst());
-        //display the policyholders last name
-        System.out.println("Policyholder's Last Name: " + polObj.getLast());
-        //display the policyholders age
-        System.out.println("Policyholder's Age: " + polObj.getAge());
-        //display the policyholders smoking status
-        System.out.println("Policyholder's Smoking Status: " + polObj.getSmoker());
-        //display the policyholders height
-        System.out.println("Policyholder's Height: " + polObj.getHeight() + " inches");
-        //display the policyholders weight
-        System.out.println("Policyholder's Weight: " + polObj.getWeight() + " pounds");
-        //display the policyholders BMI
-        System.out.println("Policyholder's BMI: " + Math.round(polObj.getBMI() * 100.0) / 100.0);
-        //display the policy price
-        System.out.println("Policy Price: $" + Math.round(polObj.getPrice() * 100.0) / 100.0);
+        catch(IOException ex)//If something goes wrong, an IOException is "thrown" to us, and we "catch" it and deal with it
+        {
+         //use the getMessage method of the exception we "caught" to print out it's message about what went wrong
+         System.out.println("Something went wrong reading the file: " + ex.getMessage());
+        }
     }
 }
